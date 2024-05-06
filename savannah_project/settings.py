@@ -131,9 +131,15 @@ WSGI_APPLICATION = 'savannah_project.wsgi.application'
 #     }
 # }
 
+# DATABASES = {
+#     'default': dj_database_url.parse('postgres://savannah_faj1_user:EtNHbycLzSJxJICO9SUdC1BUqL5vRG3o@dpg-cos7tca1hbls73ffkbsg-a.oregon-postgres.render.com/savannah_faj1'),
+# }
+
 DATABASES = {
-    'default': dj_database_url.parse('postgres://savannah_faj1_user:EtNHbycLzSJxJICO9SUdC1BUqL5vRG3o@dpg-cos7tca1hbls73ffkbsg-a.oregon-postgres.render.com/savannah_faj1'),
+    'default': dj_database_url.parse('postgres://savannah_faj1_user:EtNHbycLzSJxJICO9SUdC1BUqL5vRG3o@dpg-cos7tca1hbls73ffkbsg-a/savannah_faj1'),
 }
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
