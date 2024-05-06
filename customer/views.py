@@ -41,8 +41,9 @@ def login(request):
                         'user_id': customer.customer_id,
                         'name': customer.username,
                     }
+                    user = payload 
                     token = jwt.encode(payload, settings.SECRET_KEY , algorithm='HS256')
-                    return JsonResponse({'token': token}, status=200)
+                    return JsonResponse({'token': token, 'user':user}, status=200)
                 else:
                     # Password is incorrect
                     return JsonResponse({'error': 'Invalid email or password'}, status=400)

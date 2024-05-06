@@ -10,7 +10,6 @@ from rest_framework.permissions import IsAuthenticated
 
 
 # Import Order model and OrderSerializer (assuming you have created a serializer for the Order model)
-@permission_classes([IsAuthenticated])
 @csrf_exempt
 def orders(request):
     if request.method == 'GET':
@@ -25,16 +24,22 @@ def orders(request):
         data = json.loads(request.body)
         serializer = OrderSerializer(data=data)
         if serializer.is_valid():
-            serializer.save()
-            customer =Customer.objects.get(pk=customer_id)
-            numbers = list(customer.phone_number)
-            sending(numbers)
-            return JsonResponse(serializer.data, status=201)
+            customer_id = data.get('customer_id')  # Get customer ID from request body
+            if customer_id:
+                try:
+                    customer = Customer.objects.get(pk=customer_id)
+                    serializer.save(customer=customer)  # Save order with customer
+                    numbers = list(customer.phone_number)  # Assuming phone_number is a field
+                    sending(numbers)  # Trigger sending function (assumed)
+                    return JsonResponse(serializer.data, status=201)
+                except Customer.DoesNotExist:
+                    return JsonResponse({'error': 'Invalid customer ID'}, status=400)
+            else:
+                return JsonResponse({'error': 'Missing customer ID'}, status=400)
         return JsonResponse(serializer.errors, status=400)
     else:
         return JsonResponse({'error': 'Method not allowed'})
     
-@permission_classes([IsAuthenticated])
 @csrf_exempt
 def single_order(request, order_id):
     try:
