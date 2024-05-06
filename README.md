@@ -34,64 +34,69 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-   ##API Endpoints
-   
-###Local Environment
+## API Endpoints
+
+### Local Environment
 
 When running the project locally, you can access the API endpoints at your local server.
 
-###Production Environment
-In the production environment, access the API endpoints at: https://savannah-project-1.onrender.com/api/v1
+### Production Environment
 
-###Endpoints
+In the production environment, access the API endpoints at: [https://savannah-project-1.onrender.com/api/v1](https://savannah-project-1.onrender.com/api/v1)
 
-####Customer Endpoints
+### Endpoints
 
-#####Register User
+#### Customer Endpoints
 
-Endpoint: /customers/sign_up
-Method: POST
-Description: Register a new user.
-Parameters: None
-Response: Returns details of the newly registered user.
+##### Register User
 
-#####Log In
-Endpoint: /customers/log_in
-Method: POST
-Description: Log in a user and obtain an authentication token.
-Parameters: None
-Response: Returns a JWT token along with the user's ID.
+- **Endpoint:** `/customers/sign_up`
+- **Method:** POST
+- **Description:** Register a new user.
+- **Parameters:** None
+- **Response:** Returns details of the newly registered user.
 
-####Orders Endpoints
+##### Log In
 
-#####Add New Order
+- **Endpoint:** `/customers/log_in`
+- **Method:** POST
+- **Description:** Log in a user and obtain an authentication token.
+- **Parameters:** None
+- **Response:** Returns a JWT token along with the user's ID.
 
-Endpoint: /orders
-Method: POST
-Description: Add a new order.
-Parameters: Order details
-Response: Returns details of the newly added order.
+#### Orders Endpoints
 
-#####Get All Orders
-Endpoint: /orders
-Method: GET
-Description: Retrieve all orders.
-Parameters: None
-Response: Returns a list of all orders.
+##### Add New Order
 
-#####Get Single Order
-Endpoint: /orders/:id
-Method: GET
-Description: Retrieve details of a single order.
-Parameters: Order ID
-Response: Returns details of the specified order.
+- **Endpoint:** `/orders`
+- **Method:** POST
+- **Description:** Add a new order.
+- **Parameters:** Order details
+- **Response:** Returns details of the newly added order.
 
-#####Update Order
-Endpoint: /orders/:id
-Method: PUT
-Description: Update data for an existing order.
-Parameters: Order ID, Updated data
-Response: Returns details of the updated order.
+##### Get All Orders
+
+- **Endpoint:** `/orders`
+- **Method:** GET
+- **Description:** Retrieve all orders.
+- **Parameters:** None
+- **Response:** Returns a list of all orders.
+
+##### Get Single Order
+
+- **Endpoint:** `/orders/:id`
+- **Method:** GET
+- **Description:** Retrieve details of a single order.
+- **Parameters:** Order ID
+- **Response:** Returns details of the specified order.
+
+##### Update Order
+
+- **Endpoint:** `/orders/:id`
+- **Method:** PUT
+- **Description:** Update data for an existing order.
+- **Parameters:** Order ID, Updated data
+- **Response:** Returns details of the updated order.
 
 #####Delete Order
 Endpoint: /orders/:id
