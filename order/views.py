@@ -5,9 +5,6 @@ from .models import Order
 from .serializers import OrderSerializer
 from customer.models import Customer
 from .sms import sending
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
-
 
 # Import Order model and OrderSerializer (assuming you have created a serializer for the Order model)
 @csrf_exempt

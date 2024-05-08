@@ -46,4 +46,4 @@ class LoginSerializer(serializers.Serializer):
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ['customer_id', 'name', 'email','phone_number']
+        fields = ['customer_id', 'username', 'email','phone_number']
