@@ -105,4 +105,4 @@ In the production environment, access the API endpoints at: [https://savannah-pr
 - **Parameters:** Order ID
 - **Response:** Returns a message confirming the deletion of the order.
 
-  # Good Luck 🙃
+  # The Vue app consuming this api is hosted at https://savannah-front.vercel.app/
