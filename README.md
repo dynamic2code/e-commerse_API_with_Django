@@ -1,6 +1,7 @@
 # My savannah Technical Assessment 
 
 A Django project that handles customers and oders, both online and with sms.
+The inspiration in the REST api was the headles CMS Strapi. Exposing the endpoints in the strapi way creats a more userble endpoint. Its a more global way and removes the naming constrains.
 
 ## Table of Contents
 - [Installation](#installation)
