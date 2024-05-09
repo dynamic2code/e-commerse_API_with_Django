@@ -2,6 +2,25 @@
 
 A Django project that handles customers and oders, both online and with sms.
 The inspiration in the REST api was the headles CMS Strapi. Exposing the endpoints in the strapi way creats a more userble endpoint. Its a more global way and removes the naming constrains.
+This project has
+1. Sign up and login
+2. Sign up and login with google
+3. View products
+4. Add products to cart
+5. make orders
+6. Get sms on succesfull order 
+7. Add products for admins
+8. See list of orders
+
+## Technologies Used
+1. Africa's talking for sms
+2. GooGle Cloud for OAuth
+3. Django rest framework 
+4. Render
+5. PostgreSQL(in production)
+6. SQLite (in dev)
+   
+
 
 ## Table of Contents
 - [Installation](#installation)
