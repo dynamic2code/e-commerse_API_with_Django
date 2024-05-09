@@ -1,4 +1,16 @@
 from django.shortcuts import render,redirect
+from django.http import HttpResponse
+from django.urls import reverse
+from rest_framework import status
+from django.contrib.auth.signals import user_logged_in
+from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
+from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+from dj_rest_auth.registration.views import SocialLoginView
+from rest_framework.generics import GenericAPIView
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+import requests
 import json
 from django.http import JsonResponse
 from django.contrib.auth import authenticate
@@ -10,6 +22,39 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny 
 import jwt
 from django.conf import settings
+
+class GoogleLogin(SocialLoginView):
+    """Google login"""
+    adapter_class = GoogleOAuth2Adapter
+    callback_url = settings.GOOGLE_CALLBACK_URL
+    client_class = OAuth2Client
+
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        user_logged_in.send(sender=request.user.__class__, request=request, user=request.user)
+        return response
+    
+class GoogleCallback(APIView):
+    """Google callback"""
+    def get(self, request, *args, **kwargs):
+        code = request.GET.get("code")
+        if code:
+            res = requests.post(
+                "https://accounts.google.com/o/oauth2/token",
+                params={
+                    "client_id": settings.CLIENT_ID,
+                    "client_secret": settings.CLIENT_SECRET,
+                    "redirect_uri": request.build_absolute_uri(reverse("google_callback")),
+                    "grant_type": "authorization_code",
+                    "code": code,
+                },
+            )
+            res = requests.post(
+                request.build_absolute_uri(reverse("google_login")),
+                data={"access_token": res.json()["access_token"]},
+            )
+            return redirect('http://localhost:5173/feed')
+        return JsonResponse({"error": "Access denied"}, status= 403)
 
 
 @csrf_exempt
@@ -57,25 +102,6 @@ def login(request):
         # Method not allowed
         return JsonResponse({'error': 'Method not allowed'}, status=405)
 
-def login_openId(request):
-    print("dataaaaa")
-    return JsonResponse("dataaa")
-
-def callback(request):
-    auth_data = auth_provider.authenticate(request)
-
-    # Access the authentication data
-    access_token = auth_data['access_token']
-    expires = auth_data['expires']
-    refresh_token = auth_data['refresh_token']
-    resource_owner = auth_data['resource_owner']
-
-    # Use the authentication data as needed
-    return render(request, 'callback.html', {
-    'access_token': access_token,
-    'expires': expires,
-    'refresh_token': refresh_token,
-    'resource_owner': resource_owner})
 
 @csrf_exempt
 def customer(request):

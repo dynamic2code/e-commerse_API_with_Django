@@ -8,12 +8,12 @@ africastalking.initialize(
 sms = africastalking.SMS
 
 def sending(recipients ):
-    # Set your message
+
     message = "Order was added successfully!"
-    # Set your shortCode or senderId
+
     sender = "Sa_vannah"
     try:
         response = sms.send(message, recipients, sender)
-        print (response)
+        return response
     except Exception as e:
-        print (f'we have a problem: {e}')
+        return f'we have a problem: {e}'

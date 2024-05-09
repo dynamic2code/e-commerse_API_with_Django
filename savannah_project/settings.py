@@ -24,8 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-=)d6$c%ayb!4kh-v^&g(vq(pr873p8-1t6y)73e(w+5hlh72dg'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-DEBUG = False
+DEBUG = True
+# DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -42,9 +42,22 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework.authtoken',
+    'oidc_provider',
     'corsheaders',
+    "rest_framework_simplejwt.token_blacklist",
+    "dj_rest_auth",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
+
+    # Our apps
     'customer',
     'order',
+    'product',
+    'cart'
+
 ]
 
 REST_FRAMEWORK = {
@@ -95,6 +108,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "allauth.account.middleware.AccountMiddleware"
 
 ]
 
@@ -121,24 +135,18 @@ TEMPLATES = [
 WSGI_APPLICATION = 'savannah_project.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-# DATABASES = {
-#     'default': dj_database_url.parse('postgres://savannah_faj1_user:EtNHbycLzSJxJICO9SUdC1BUqL5vRG3o@dpg-cos7tca1hbls73ffkbsg-a.oregon-postgres.render.com/savannah_faj1'),
-# }
 
 #for production
-DATABASES = {
-    'default': dj_database_url.parse('postgres://savannah_faj1_user:EtNHbycLzSJxJICO9SUdC1BUqL5vRG3o@dpg-cos7tca1hbls73ffkbsg-a/savannah_faj1'),
-}
+# DATABASES = {
+#     'default': dj_database_url.parse('postgres://savannah_faj1_user:EtNHbycLzSJxJICO9SUdC1BUqL5vRG3o@dpg-cos7tca1hbls73ffkbsg-a/savannah_faj1'),
+# }
 
 
 
@@ -182,3 +190,32 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#openId connect settings
+
+LOGIN_URL = '/accounts/login/'
+
+CLIENT_ID = '609618526385-33bei44togkhd6io35hb3fgakhkqaf1t.apps.googleusercontent.com'
+CLIENT_SECRET = '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'
+GOOGLE_CALLBACK_URL = 'google_callback'
+
+# allauth settings
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'offline',
+        },
+        'FETCH_USERINFO' : True,
+    },
+    'github': {
+        'SCOPE': [
+            'user',
+        ],
+    }
+}
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
+ACCOUNT_EMAIL_REQUIRED = True

@@ -1,12 +1,25 @@
 from django.utils import timezone
 from django.db import models
+from phonenumber_field.modelfields import PhoneNumberField
+from product.models import Product
 from customer.models import Customer
-# Create your models here.
+
 
 class Order(models.Model):
-    order_id =  models.AutoField(primary_key=True)
-    item = models.CharField(max_length=20)
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    time = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(default=timezone.now)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-   
+    phone_number = PhoneNumberField()
+
+    def __str__(self):
+        return f"sms {self.phone_number}"
+
+class OrderItem(models.Model):
+    quantity = models.PositiveIntegerField()
+
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
+
+    def __str__(self):
+        return f"{self.product} in {self.order.customer.username}'s order"
