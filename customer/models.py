@@ -1,11 +1,18 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
-class Customer(models.Model):
-    customer_id = models.AutoField(primary_key=True)
-    username  = models.CharField(max_length=20)
-    code = models.CharField(max_length=8)
-    email = models.EmailField(unique=True, verbose_name='Email address')
-    password = models.CharField(max_length=128)
-    phone_number = models.CharField(max_length=10)
+class Customer(AbstractUser):
+    groups = models.ManyToManyField(
+        'auth.Group',
+        related_name='customer_groups',  # New argument
+        blank=True,
+        help_text='The groups this customer belongs to.'
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name='customer_user_permissions',  # New argument
+        blank=True,
+        help_text='Specific permissions for this customer.'
+    )

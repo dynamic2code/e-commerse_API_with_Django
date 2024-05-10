@@ -5,12 +5,14 @@ from .views import (
     customer,
     sign_up,
     login,
-    login_openId
-) 
+    GoogleCallback,
+    GoogleLogin
+)
 
 urlpatterns = [
-    path('/sign_up', sign_up , name='sign_up'),
-    path('/login_openId', login_openId, name='login_openId'),
-    path('/log_in', login, name='log_in'),
+    path('sign_up/', sign_up , name='sign_up'),
+    path('log_in/', login, name='log_in'),
+    path("google/", GoogleLogin.as_view(), name="google_login"),
+    path("google_callback/", GoogleCallback.as_view(), name="google_callback"),
     path('', customer, name='customer')
 ]

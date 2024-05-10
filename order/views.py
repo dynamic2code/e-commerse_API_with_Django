@@ -1,68 +1,71 @@
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .models import Order
-from .serializers import OrderSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Order, OrderItem
+from .serializers import OrderSerializer, OrderItemSerializer
 from customer.models import Customer
 from .sms import sending
 
-# Import Order model and OrderSerializer (assuming you have created a serializer for the Order model)
-@csrf_exempt
-def orders(request):
-    if request.method == 'GET':
-        # Get a list of all the orders in the database
+class OrdersView(APIView):
+    @csrf_exempt
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request):
         orders = Order.objects.all()
         serializer = OrderSerializer(orders, many=True)
-        response_data = {'data': serializer.data}  # Add data property
-        return JsonResponse(response_data, safe=False)
-    elif request.method == 'POST':
-        # Add a new order to the database
-        # Assuming the request contains JSON data with 'item' and 'amount' fields
-        data = json.loads(request.body)
-        serializer = OrderSerializer(data=data)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = OrderSerializer(data=request.data)
         if serializer.is_valid():
-            customer_id = data.get('customer_id')  # Get customer ID from request body
+            customer_id = request.data.get('customer_id')
             if customer_id:
                 try:
                     customer = Customer.objects.get(pk=customer_id)
-                    serializer.save(customer=customer)  # Save order with customer
-                    numbers = list(customer.phone_number)  # Assuming phone_number is a field
-                    sending(numbers)  # Trigger sending function (assumed)
-                    return JsonResponse(serializer.data, status=201)
+                    order = serializer.save(customer=customer)
+                    sending(order.phone_number)
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
                 except Customer.DoesNotExist:
-                    return JsonResponse({'error': 'Invalid customer ID'}, status=400)
+                    return Response({'error': 'Invalid customer ID'}, status=status.HTTP_400_BAD_REQUEST)
             else:
-                return JsonResponse({'error': 'Missing customer ID'}, status=400)
-        return JsonResponse(serializer.errors, status=400)
-    else:
-        return JsonResponse({'error': 'Method not allowed'})
-    
-@csrf_exempt
-def single_order(request, order_id):
-    try:
-        order = Order.objects.get(pk=order_id)
-    except Order.DoesNotExist:
-        return JsonResponse({'error': 'Order does not exist'}, status=404)
+                return Response({'error': 'Missing customer ID'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    if request.method == "GET":
-        # Get an individual order by its ID
-        serializer = OrderSerializer(order)
-        return JsonResponse(serializer.data)
+class SingleOrderView(APIView):
+    @csrf_exempt
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
-    elif request.method == "PUT":
-        # Update an existing order with new information
-        # Assuming the request contains JSON data with 'item' and 'amount' fields
-        data = json.loads(request.body)
-        serializer = OrderSerializer(order, data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data)
-        return JsonResponse(serializer.errors, status=400)
+    def get_object(self, order_id):
+        try:
+            return Order.objects.get(pk=order_id)
+        except Order.DoesNotExist:
+            return None
 
-    elif request.method == "DELETE":
-        # Remove an order from the database
-        order.delete()
-        return JsonResponse({'message': 'Order deleted successfully'}, status=204)
+    def get(self, request, order_id):
+        order = self.get_object(order_id)
+        if order:
+            serializer = OrderSerializer(order)
+            return Response(serializer.data)
+        return Response({'error': 'Order does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
-    else:
-        return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
+    def put(self, request, order_id):
+        order = self.get_object(order_id)
+        if order:
+            serializer = OrderSerializer(order, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'Order does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self, request, order_id):
+        order = self.get_object(order_id)
+        if order:
+            order.delete()
+            return Response({'message': 'Order deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'error': 'Order does not exist'}, status=status.HTTP_404_NOT_FOUND)
