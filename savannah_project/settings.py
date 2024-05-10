@@ -136,18 +136,18 @@ TEMPLATES = [
 WSGI_APPLICATION = 'savannah_project.wsgi.application'
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-
-#for production
 # DATABASES = {
-#     'default': dj_database_url.parse('postgres://savannah_faj1_user:EtNHbycLzSJxJICO9SUdC1BUqL5vRG3o@dpg-cos7tca1hbls73ffkbsg-a/savannah_faj1'),
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
 # }
+
+
+for production
+DATABASES = {
+    'default': dj_database_url.parse('postgres://savannah_faj1_user:EtNHbycLzSJxJICO9SUdC1BUqL5vRG3o@dpg-cos7tca1hbls73ffkbsg-a/savannah_faj1'),
+}
 
 
 
