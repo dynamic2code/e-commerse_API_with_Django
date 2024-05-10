@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import dj_database_url
 from datetime import timedelta
 from pathlib import Path
+from .secrets import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -195,8 +196,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = '/accounts/login/'
 
-CLIENT_ID = '609618526385-33bei44togkhd6io35hb3fgakhkqaf1t.apps.googleusercontent.com'
-CLIENT_SECRET = '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'
+CLIENT_ID = client_id
+CLIENT_SECRET = client_secrets
 GOOGLE_CALLBACK_URL = 'google_callback'
 
 # allauth settings
