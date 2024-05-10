@@ -15,11 +15,3 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ['id', 'amount', 'created_at', 'updated_at', 'customer_id', 'phone_number', 'product_items']
-
-    def create(self, validated_data):
-        products_data = validated_data.pop('orderitem_set')
-        order = Order.objects.create(**validated_data)
-        for product_data in products_data:
-            OrderItem.objects.create(order=order, **product_data)
-        return order
-        

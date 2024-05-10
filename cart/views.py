@@ -24,7 +24,7 @@ class CartView(APIView):
     def post(self, request, user_id):
         try:
             customer = Customer.objects.get(pk=user_id)
-        except User.DoesNotExist:
+        except Customer.DoesNotExist:
             return Response({'error': 'User does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = CartSerializer(data=request.data)

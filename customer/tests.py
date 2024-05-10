@@ -14,7 +14,6 @@ class SignUpViewTest(TestCase):
             'username': 'test_user',
             'email': 'test@example.com',
             'password': 'TestPassword123',
-            'phone_number': '1234567890'
         }
         response = self.client.post(self.url, data, content_type='application/json')
         self.assertEqual(response.status_code, 201)
@@ -24,8 +23,7 @@ class SignUpViewTest(TestCase):
         data = {
             'username': 'test_user',
             'email': 'test@example.com',
-            'password': 'short',  # Password too short
-            'phone_number': '1234567890'
+            'password': 'short', 
         }
         response = self.client.post(self.url, data, content_type='application/json')
         self.assertEqual(response.status_code, 400)
@@ -38,7 +36,6 @@ class LoginViewTest(TestCase):
             username='test_user',
             email='test@example.com',
             password=make_password('TestPassword123'),
-            phone_number='1234567890'
         )
         self.url = reverse('log_in')
 
@@ -75,13 +72,11 @@ class CustomerViewTest(TestCase):
             username='customer1',
             email='customer1@example.com',
             password=make_password('CustomerPassword123'),
-            phone_number='1234567890'
         )
         Customer.objects.create(
             username='customer2',
             email='customer2@example.com',
             password=make_password('CustomerPassword123'),
-            phone_number='1234567890'
         )
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)

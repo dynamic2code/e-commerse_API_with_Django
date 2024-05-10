@@ -5,3 +5,4 @@ savannah_project/product/migrations
 savannah_project/order/migrations
 savannah_project/customer/migrations
 savannah_project/cart/migrations
+savannah_project/images

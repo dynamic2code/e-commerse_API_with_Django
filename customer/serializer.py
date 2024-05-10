@@ -19,7 +19,7 @@ class SignUpSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Customer
-        fields = ('username', 'email', 'password', 'phone_number')
+        fields = ('username', 'email', 'password')
 
     def create(self, validated_data):
         validated_data['password'] = make_password(validated_data['password'])
@@ -46,4 +46,4 @@ class LoginSerializer(serializers.Serializer):
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ['customer_id', 'username', 'email','phone_number']
+        fields = ['customer_id', 'username', 'email']

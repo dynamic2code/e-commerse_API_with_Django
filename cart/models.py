@@ -6,6 +6,7 @@ from customer.models import Customer
 
 class Cart(models.Model):
     customer = models.OneToOneField(Customer, on_delete=models.CASCADE)
+    product = models.ManyToManyField(Product, through="cart.CartItem")
 
     def __str__(self):
         return f"{self.customer.username}'s cart"
