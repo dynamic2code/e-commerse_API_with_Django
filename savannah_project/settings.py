@@ -146,7 +146,7 @@ WSGI_APPLICATION = 'savannah_project.wsgi.application'
 
 for production
 DATABASES = {
-    'default': dj_database_url.parse('postgres://savannah_faj1_user:EtNHbycLzSJxJICO9SUdC1BUqL5vRG3o@dpg-cos7tca1hbls73ffkbsg-a/savannah_faj1'),
+    'default': dj_database_url.parse('postgres://savannah_m2kf_user:hCdftafi8lebqhCNkMcY17X8TVuefSbA@dpg-cp5ohmtjm4es73a3g9i0-a/savannah_m2kf'),
 }
 
 
